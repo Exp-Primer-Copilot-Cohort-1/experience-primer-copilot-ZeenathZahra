@@ -21,5 +21,6 @@ router.get('/', function(req, res, next) {
 router.post('/', function(req, res, next) {
     var comment = new Comment({
         body: req.body.body,
-
+    });
+});
 
