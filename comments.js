@@ -1,13 +1,15 @@
-// create web server
-
 var express = require('express');
-var router = express.Router();
+var app = express();
+var bodyParser = require('body-parser');
 var Comment = require('../models/comment');
 var User = require('../models/user');
 
+// Body parsing middleware
+app.use(bodyParser.json());
+
 // GET /comments
 // get all comments
-router.get('/', function(req, res, next) {
+app.get('/comments', function(req, res, next) {
     Comment.find(function(err, comments) {
         if (err) {
             return next(err);
@@ -18,7 +20,7 @@ router.get('/', function(req, res, next) {
 
 // POST /comments
 // save comment
-router.post('/', function(req, res, next) {
+app.post('/comments', function(req, res, next) {
     var comment = new Comment({
         body: req.body.body,
     });
@@ -31,3 +33,8 @@ router.post('/', function(req, res, next) {
     });
 });
 
+// Start the server
+var port = process.env.PORT || 3000;
+app.listen(port, function() {
+    console.log('Server is listening on port ' + port);
+});
