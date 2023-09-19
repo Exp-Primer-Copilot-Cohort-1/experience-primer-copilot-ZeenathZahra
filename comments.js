@@ -22,5 +22,12 @@ router.post('/', function(req, res, next) {
     var comment = new Comment({
         body: req.body.body,
     });
+
+    comment.save(function(err, comment) {
+        if (err) {
+            return next(err);
+        }
+        res.status(201).json(comment);
+    });
 });
 
