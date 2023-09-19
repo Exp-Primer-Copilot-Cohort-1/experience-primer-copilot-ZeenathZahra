@@ -1,39 +1,25 @@
-// create web server with express
+// create web server
+
 var express = require('express');
-var app = express();
-var fs = require('fs');
-var bodyParser = require('body-parser');
+var router = express.Router();
+var Comment = require('../models/comment');
+var User = require('../models/user');
 
-// use body parser to parse JSON body
-app.use(bodyParser.json());
-
-// serve static files from public directory
-app.use(express.static('public'));
-
-// create a route for the app
 // GET /comments
-// returns all comments from the database
-app.get('/comments', function(req, res) {
-  fs.readFile('comments.json', function(err, data) {
-    if (err) {
-      console.error(err);
-      process.exit(1);
-    }
-    res.json(JSON.parse(data));
-  });
+// get all comments
+router.get('/', function(req, res, next) {
+    Comment.find(function(err, comments) {
+        if (err) {
+            return next(err);
+        }
+        res.json(comments);
+    });
 });
 
 // POST /comments
-// adds a new comment to the database
-app.post('/comments', function(req, res) {
-  fs.readFile('comments.json', function(err, data) {
-    if (err) {
-      console.error(err);
-      process.exit(1);
-    }
-    var comments = JSON.parse(data);
-    var newComment = {
-      id: Date.now(),
-
+// save comment
+router.post('/', function(req, res, next) {
+    var comment = new Comment({
+        body: req.body.body,
 
 
